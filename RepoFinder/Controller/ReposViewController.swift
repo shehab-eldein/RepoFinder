@@ -148,5 +148,12 @@ extension ReposViewController : UITableViewDelegate,UITableViewDataSource{
             }
         }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+      
+        
+        coordinator?.navigateToDetails(gitRepos: searchText.isEmpty ? reposArr[indexPath.row]:filteredRepos[indexPath.row])
+    }
+    
     
 }

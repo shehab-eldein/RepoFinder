@@ -136,15 +136,12 @@
 		634060742B4F6E64003DCE8C /* RepoFinder */ = {
 			isa = PBXGroup;
 			children = (
-				634060C22B4F8DE0003DCE8C /* Managers */,
-				634060AB2B4F7197003DCE8C /* Helper */,
+				634060752B4F6E64003DCE8C /* AppDelegate.swift */,
+				634060A82B4F7164003DCE8C /* Model */,
 				634060AA2B4F7184003DCE8C /* View */,
 				634060A92B4F716C003DCE8C /* Controller */,
-				634060A82B4F7164003DCE8C /* Model */,
-				634060752B4F6E64003DCE8C /* AppDelegate.swift */,
-				634060812B4F6E66003DCE8C /* Assets.xcassets */,
-				634060862B4F6E66003DCE8C /* Info.plist */,
-				6340607E2B4F6E64003DCE8C /* RepoFinder.xcdatamodeld */,
+				634060AB2B4F7197003DCE8C /* Helper */,
+				63A447312B51B9FB00E52F34 /* Utilites */,
 			);
 			path = RepoFinder;
 			sourceTree = "<group>";
@@ -169,6 +166,8 @@
 		634060A82B4F7164003DCE8C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				63A447322B51BA1100E52F34 /* DBManager */,
+				634060BB2B4F8BBE003DCE8C /* NetworkManager */,
 				634060B72B4F88C4003DCE8C /* GithubRepo.swift */,
 				634060B92B4F8951003DCE8C /* Owner.swift */,
 			);
@@ -198,8 +197,9 @@
 		634060AB2B4F7197003DCE8C /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				634060C02B4F8CB6003DCE8C /* Constant.swift */,
 				631811CF2B4FCFE000B944A9 /* Extensions */,
+				634060AE2B4F76A8003DCE8C /* NavigationManager */,
+				634060C02B4F8CB6003DCE8C /* Constant.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -223,15 +223,6 @@
 			path = NetworkManager;
 			sourceTree = "<group>";
 		};
-		634060C22B4F8DE0003DCE8C /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				634060BB2B4F8BBE003DCE8C /* NetworkManager */,
-				634060AE2B4F76A8003DCE8C /* NavigationManager */,
-			);
-			path = Managers;
-			sourceTree = "<group>";
-		};
 		634060C32B4FA402003DCE8C /* nibs */ = {
 			isa = PBXGroup;
 			children = (
@@ -239,6 +230,23 @@
 				634060C52B4FA653003DCE8C /* RepoCell.xib */,
 			);
 			path = nibs;
+			sourceTree = "<group>";
+		};
+		63A447312B51B9FB00E52F34 /* Utilites */ = {
+			isa = PBXGroup;
+			children = (
+				634060812B4F6E66003DCE8C /* Assets.xcassets */,
+				634060862B4F6E66003DCE8C /* Info.plist */,
+			);
+			path = Utilites;
+			sourceTree = "<group>";
+		};
+		63A447322B51BA1100E52F34 /* DBManager */ = {
+			isa = PBXGroup;
+			children = (
+				6340607E2B4F6E64003DCE8C /* RepoFinder.xcdatamodeld */,
+			);
+			path = DBManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

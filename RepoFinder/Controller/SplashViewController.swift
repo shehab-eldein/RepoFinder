@@ -8,38 +8,53 @@
 import UIKit
 
 class SplshViewController: UIViewController,StoryBoard {
-
+    
     weak var coordinator: MainCoordinator?
-    let netWorkManager = NetworkingManager()
-
+    
     @IBOutlet weak var gitLogo: UIImageView!
     
-   
+    @IBOutlet weak var appTitleLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-        netWorkManager.getImageData(imgURL: "https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-1024.png"){ imgData in
-            
-            DispatchQueue.main.async {
-                self.gitLogo.image = UIImage(data: imgData!)
-                self.performTaskAfterDelay()
-            }
-        }
-       
+        
+        gitLogo.image = UIImage(named: "gitLogo")
+        
         
     }
     override func viewDidAppear(_ animated: Bool) {
-       
+        animateTitle(label: appTitleLabel, text: "Repo Finder")
+        
     }
-
-    func performTaskAfterDelay() {
-        let delayInSeconds: TimeInterval = 1.0
-        DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds){
+    
+    func animateTitle(label: UILabel, text: String) {
+        var animatedText = ""
+        let characters = Array(text)
+        
+        for (index, character) in characters.enumerated() {
+            
+        DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.1) {
+                animatedText.append(character)
+                label.text = animatedText
+                
+                if index == characters.count - 1 {
+                    UIView.transition(with: label, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                        label.text = text
+                    }, completion:{_ in
+                        
+                        self.navigateHome()
+                    })
+                }
+            }
+        }
+    }
+    
+    
+    func navigateHome() {
+        delay(seconds: 1.2) {
             self.coordinator?.navigateToRepos()
         }
         
         
     }
-
 }
-
