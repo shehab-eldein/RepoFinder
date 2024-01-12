@@ -28,6 +28,7 @@ class MainCoordinator : Coordinator {
         let reposVC = ReposViewController.instantiate()
         reposVC.coordinator = self
         reposVC.navigationItem.hidesBackButton = true
+        reposVC.navigationController?.navigationBar.isHidden = true
         navigationController.pushViewController( reposVC, animated: true)
         
     }

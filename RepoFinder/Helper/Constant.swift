@@ -8,5 +8,7 @@
 import Foundation
 
 struct Constant {
-   static let repoEndPoint = "https://api.github.com/repositories"
+   static let REPO_END_POINT = "https://api.github.com/repositories"
+   static let REPO_CELL_ID = "repoCell"
+   static let REPO_NIB_NAME = "RepoCell"
 }

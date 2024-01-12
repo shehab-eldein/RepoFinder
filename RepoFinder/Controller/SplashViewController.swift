@@ -10,14 +10,26 @@ import UIKit
 class SplshViewController: UIViewController,StoryBoard {
 
     weak var coordinator: MainCoordinator?
+    let netWorkManager = NetworkingManager()
+
+    @IBOutlet weak var gitLogo: UIImageView!
     
+   
     override func viewDidLoad() {
         super.viewDidLoad()
+       
+        netWorkManager.getImageData(imgURL: "https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-1024.png"){ imgData in
+            
+            DispatchQueue.main.async {
+                self.gitLogo.image = UIImage(data: imgData!)
+                self.performTaskAfterDelay()
+            }
+        }
        
         
     }
     override func viewDidAppear(_ animated: Bool) {
-        performTaskAfterDelay()
+       
     }
 
     func performTaskAfterDelay() {

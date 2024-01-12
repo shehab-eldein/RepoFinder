@@ -13,7 +13,7 @@ class NetworkingManager{
     var delegate: NetworkDelegate!
     
     func getAllRepos ()  {
-        if let url = URL(string: Constant.repoEndPoint) {
+        if let url = URL(string: Constant.REPO_END_POINT) {
             let request = URLRequest(url: url)
             let session = URLSession(configuration: .default)
             let task =  session.dataTask   (with: request){
@@ -46,4 +46,28 @@ class NetworkingManager{
             return nil
         }
     }
+    
+    
+    func getImageData( imgURL:String , completion: @escaping (Data?) -> Void) {
+        guard let url = URL(string: imgURL) else {
+            completion(nil)
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+               
+                completion(nil)
+                return
+            }
+
+            if let data = data {
+               
+                completion(data)
+            }
+        }
+
+        task.resume()
+    }
+
 }
