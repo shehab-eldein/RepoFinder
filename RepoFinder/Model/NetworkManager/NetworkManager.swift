@@ -7,25 +7,29 @@
 
 import Foundation
 import Foundation
+import UIKit
 
 class NetworkingManager{
     
     var delegate: NetworkDelegate!
+    let dbManager = DBManager()
     
     func getAllRepos ()  {
         if let url = URL(string: Constant.REPO_END_POINT) {
             let request = URLRequest(url: url)
             let session = URLSession(configuration: .default)
-            let task =  session.dataTask   (with: request){
+            
+            let task =  session.dataTask   (with: request){ [self]
                 (data, response, error) in
                 if error != nil{
-                    self.delegate.didFetchError(error?.localizedDescription ?? "Unkown Error")
+                    delegate.didFetchError(error?.localizedDescription ?? "Unkown Error")
                     return
                 }
                 if let safeData = data {
-                    print("SAFE DATA")
-                   if let gitHubRepos =  self.parseJSON(safeData){
-                        self.delegate.didFetchRepos(gitHubRepos)
+                   if let gitHubRepos =  parseJSON(safeData){
+                       dbManager.deleteAllRepos()
+                       BuildRepos(gitHubRepos: gitHubRepos)
+                    
                     }
                 }
             }
@@ -35,6 +39,26 @@ class NetworkingManager{
         }
         
     }
+    
+    private func BuildRepos (gitHubRepos : [GithubRepository]) {
+        
+        var reposArr : [LocalGitRepo] = []
+        let group = DispatchGroup()
+        
+        
+        for singleRepo in gitHubRepos {
+            group.enter()
+            RepoBuilder(networkManager: self, networkRepoObject: singleRepo).build { repo in
+                reposArr.append(repo!)
+                group.leave()
+            }
+        }
+        group.notify(queue: .main) {
+            self.dbManager.saveReposToDB(repos: reposArr)
+            self.delegate.didFetchRepos(reposArr)
+                               }
+    }
+    
     private func parseJSON(_ reposData : Data) -> [GithubRepository]? {
         let decoder = JSONDecoder()
         do{

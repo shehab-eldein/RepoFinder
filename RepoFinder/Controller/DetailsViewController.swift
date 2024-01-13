@@ -9,7 +9,8 @@ import UIKit
 
 class DetailsViewController: UIViewController,StoryBoard {
     
-    
+// MARK: - Outlets
+
     @IBOutlet weak var ownerNameLabel: UILabel!
     
     @IBOutlet weak var fullNameLabel: UILabel!
@@ -21,14 +22,12 @@ class DetailsViewController: UIViewController,StoryBoard {
     @IBOutlet weak var ownerImg: UIImageView!
     
     
-    
-    var repoObject: GithubRepository!
-    let networkManager = NetworkingManager();
-    
-    
-    
-    
+// MARK: - Var
+
+    var repoObject: LocalGitRepo!
     weak var coordinator: MainCoordinator?
+
+// MARK: - LifeCycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,28 +39,25 @@ class DetailsViewController: UIViewController,StoryBoard {
         
     }
     
+// MARK: - Functions
+
     func setupDetails() {
-        ownerNameLabel.text = repoObject.owner.login
+        ownerNameLabel.text = repoObject.ownerName
         fullNameLabel.text = repoObject.fullName
-        detailsLabel.text = repoObject.description ?? "There are no Details!"
-        fetchImg(imgUrl: repoObject.owner.avatarURL)
+        detailsLabel.text = repoObject.details
+        handelImage(imageData: repoObject.image)
         
     }
-    func fetchImg(imgUrl: String){
-        networkManager.getImageData(imgURL: imgUrl) { imgData in
-            if (imgData == nil) {
-                DispatchQueue.main.async {
-                    self.ownerImg.image =  UIImage(named: "gitLogo")
-                }
-                
-            }else {
-                DispatchQueue.main.async {
-                    self.ownerImg.image = UIImage(data: imgData!)
-                }
-               
-            }
+    
+    private func handelImage(imageData: Data?){
+        if let safeData = imageData {
+            ownerImg.image = UIImage(data: safeData)
+        } else {
+            ownerImg.image = UIImage(named: "gitLogo")
         }
-    }
+        }
+
+    
     
     
     func openLink(link:String){
@@ -77,9 +73,11 @@ class DetailsViewController: UIViewController,StoryBoard {
                 }
     }
     
+// MARK: - Actions
+
     @IBAction func visitLinkTapped(_ sender: UIButton) {
         
-        sender.tag == 0 ? openLink(link: repoObject.htmlURL) : openLink(link: repoObject.owner.htmlURL)
+        sender.tag == 0 ? openLink(link: repoObject.repoUrl) : openLink(link: repoObject.profileUrl)
         
     }
     

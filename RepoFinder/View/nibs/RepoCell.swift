@@ -18,44 +18,49 @@ class RepoCell: UITableViewCell {
     
     @IBOutlet weak var repoName: UILabel!
     
+   
+    var repo: GithubRepository!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+      
         ownerImg.makeRounded()
         bacGroundView.addCornerRadius(12)
         bacGroundView.elevate()
-    }
-    
-    func configureCell (networkManager: NetworkingManager, gitRepo: GithubRepository ){
-        
-       handelImage(networkManager: networkManager, gitRepo: gitRepo)
-        ownerName.text = gitRepo.owner.login
-        repoDate.text = getRandomDateFormattedString()
-        repoName.text = gitRepo.name
         
     }
     
-   private func handelImage(networkManager: NetworkingManager, gitRepo: GithubRepository){
+    func configureCell (gitRepo: LocalGitRepo ){
         
-       networkManager.getImageData(imgURL: gitRepo.owner.avatarURL){  imgData
-           in
-            if (imgData == nil) {
-                DispatchQueue.main.async {
-                    self.ownerImg.image =  UIImage(named: "gitLogo")
-                }
-                
-            }else {
-                DispatchQueue.main.async {
-                    self.ownerImg.image = UIImage(data: imgData!)
-                }
-               
-            }
-            
-           
-            
+        //ownerImg.fromURL(url: URL(string: gitRepo.owner.avatarURL)! )
+        //handelImage(networkManager: NetworkingManager(), gitRepo: gitRepo)
+        ownerName.text = gitRepo.ownerName
+        repoDate.text =  gitRepo.date
+        repoName.text = gitRepo.fullName
+        handelImage(imageData: gitRepo.image)
+        //self.repo = gitRepo
+        
         }
+    
+    func configureCashedRepo (cahsedRepo :LocalGitRepo) {
+        ownerName.text = cahsedRepo.ownerName
+        repoDate.text = cahsedRepo.date
+        repoName.text = cahsedRepo.fullName
+        ownerImg.image = UIImage(data: cahsedRepo.image!)
+        
     }
-   
+    
+  
+//    func saveRepoToDB () {
+//        DBManager().saveRepoToDB(repo: LocalGitRepo(ownerName: repo.owner.login, fullName: repo.fullName, details: repo.description ?? " No Details", date: getRandomDateFormattedString(), profileUrl: repo.owner.htmlURL, repoUrl: repo.htmlURL, image: ownerImg.image!.pngData()!))
+//    }
+    private func handelImage(imageData: Data?){
+        if let safeData = imageData {
+            ownerImg.image = UIImage(data: safeData)
+        } else {
+            ownerImg.image = UIImage(named: "gitLogo")
+        }
+        }
 
     func getRandomDateFormattedString() -> String {
         

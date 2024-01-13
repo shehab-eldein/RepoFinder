@@ -34,4 +34,13 @@ extension UIViewController {
     func delay(seconds: Double, completion: @escaping ()-> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: completion)
     }
+    
+    func showInfoPopup(title: String, message: String) {
+          let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+          
+          let okayAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+          alertController.addAction(okayAction)
+          
+          present(alertController, animated: true, completion: nil)
+      }
 }

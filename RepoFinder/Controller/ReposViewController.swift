@@ -9,44 +9,47 @@ import UIKit
 
 class ReposViewController: UIViewController,StoryBoard,NetworkDelegate {
     
+// MARK: - Outlets
     @IBOutlet weak var indecator: UIActivityIndicatorView!
     @IBOutlet weak var reposTabel: UITableView!
     @IBOutlet weak var findRepoSearchBar: UISearchBar!
     
-    
+// MARK: - Var
     weak var coordinator: MainCoordinator?
     let netWorkManager = NetworkingManager()
-    var reposArr : [GithubRepository] = []
-    var filteredRepos: [GithubRepository] = []
+    let dbManager = DBManager()
+    var reposArr : [LocalGitRepo] = []
+    var filteredRepos: [LocalGitRepo] = []
     var isLoading = true
     var searchText = ""
+    var isOffline = false
     var loadedItemCount = 10 {
         didSet{
             isLoading = true
         }
     };
 
-
+// MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         indecator.startAnimating()
         initRepoTabelView()
         getRepos()
+       
         
-        
-        
-    }
-    
+        }
+// MARK: - Functions
     func filterRepos(with searchText: String) {
         
-        filteredRepos = reposArr.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        filteredRepos = reposArr.filter { $0.fullName.lowercased().contains(searchText.lowercased()) }
            reposTabel.reloadData()
        }
     func getRepos() {
         
         netWorkManager.delegate = self
         netWorkManager.getAllRepos()
+        
     }
     
     func initRepoTabelView() {
@@ -68,8 +71,10 @@ class ReposViewController: UIViewController,StoryBoard,NetworkDelegate {
             isLoading = false
         }
     }
-    
-    func didFetchRepos(_ GitRepo: [GithubRepository]) {
+// MARK: - Call Back functions
+   func didFetchRepos(_ GitRepo: [LocalGitRepo]) {
+       
+        print(GitRepo.count)
         reposArr = GitRepo
         DispatchQueue.main.async { [self] in
           
@@ -79,17 +84,23 @@ class ReposViewController: UIViewController,StoryBoard,NetworkDelegate {
         }
     
     func didFetchError(_ error: String) {
-        //show pop up
-        print("Error Enter")
-        print(error)
+       
+        isOffline = true
+        reposArr = dbManager.getProductsCash()
+       
+        DispatchQueue.main.async { [self] in
+            
+            indecatorHandler(work: false)
+            reposTabel.reloadData()
+            showInfoPopup(title: "Error", message: error + "This is Last Cashed Data.")
+            
+          }
+        
     }
     
-   
-
-   
-
 }
 
+// MARK: - Search Bar Extension
 extension ReposViewController: UISearchBarDelegate {
     
     
@@ -106,6 +117,7 @@ extension ReposViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: -  Table View Extension
 extension ReposViewController : UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -114,15 +126,12 @@ extension ReposViewController : UITableViewDelegate,UITableViewDataSource{
         
         return min(loadedItemCount, searchText.isEmpty ? reposArr.count : filteredRepos.count)
         
-                
-        
-      }
+                }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: Constant.REPO_CELL_ID, for: indexPath) as! RepoCell
-        cell.configureCell(networkManager: netWorkManager, gitRepo: searchText.isEmpty ?  reposArr[indexPath.row] : filteredRepos[indexPath.row] )
-
+        cell.configureCell(gitRepo: searchText.isEmpty ?  reposArr[indexPath.row] : filteredRepos[indexPath.row] )
             return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -144,15 +153,12 @@ extension ReposViewController : UITableViewDelegate,UITableViewDataSource{
                     
                 }
             
-               
-            }
+               }
         }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-      
-        
-        coordinator?.navigateToDetails(gitRepos: searchText.isEmpty ? reposArr[indexPath.row]:filteredRepos[indexPath.row])
+      coordinator?.navigateToDetails(gitRepos: searchText.isEmpty ? reposArr[indexPath.row]:filteredRepos[indexPath.row])
     }
     
     
