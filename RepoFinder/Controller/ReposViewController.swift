@@ -7,10 +7,16 @@
 
 import UIKit
 
+
 class ReposViewController: UIViewController,StoryBoard,NetworkDelegate {
     
 // MARK: - Outlets
+    
     @IBOutlet weak var indecator: UIActivityIndicatorView!
+    
+   
+    
+    
     @IBOutlet weak var reposTabel: UITableView!
     @IBOutlet weak var findRepoSearchBar: UISearchBar!
     
@@ -18,8 +24,8 @@ class ReposViewController: UIViewController,StoryBoard,NetworkDelegate {
     weak var coordinator: MainCoordinator?
     let netWorkManager = NetworkingManager()
     let dbManager = DBManager()
-    var reposArr : [LocalGitRepo] = []
-    var filteredRepos: [LocalGitRepo] = []
+    var reposArr : [Repo] = []
+    var filteredRepos: [Repo] = []
     var isLoading = true
     var searchText = ""
     var isOffline = false
@@ -36,6 +42,7 @@ class ReposViewController: UIViewController,StoryBoard,NetworkDelegate {
         indecator.startAnimating()
         initRepoTabelView()
         getRepos()
+       
        
         
         }
@@ -72,7 +79,7 @@ class ReposViewController: UIViewController,StoryBoard,NetworkDelegate {
         }
     }
 // MARK: - Call Back functions
-   func didFetchRepos(_ GitRepo: [LocalGitRepo]) {
+   func didFetchRepos(_ GitRepo: [Repo]) {
        
         print(GitRepo.count)
         reposArr = GitRepo
@@ -135,9 +142,8 @@ extension ReposViewController : UITableViewDelegate,UITableViewDataSource{
             return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let screenHeight = UIScreen.main.bounds.height
-        let rowHeight = screenHeight / 8
-        return rowHeight
+        
+        return 120
     }
      func scrollViewDidScroll(_ scrollView: UIScrollView) {
          

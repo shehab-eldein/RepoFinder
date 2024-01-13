@@ -13,61 +13,62 @@ class NetworkingManager{
     
     var delegate: NetworkDelegate!
     let dbManager = DBManager()
+    var session: URLSession
+       
+       init(session: URLSession = URLSession.shared) {
+           self.session = session
+       }
     
-    func getAllRepos ()  {
-        if let url = URL(string: Constant.REPO_END_POINT) {
-            let request = URLRequest(url: url)
-            let session = URLSession(configuration: .default)
+    func fetchData(from url: URL, completion: @escaping (Data?) -> Void) {
+        let request = URLRequest(url: url)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { (data, _, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                completion(nil)
+                return
+            }
             
-            let task =  session.dataTask   (with: request){ [self]
-                (data, response, error) in
-                if error != nil{
-                    delegate.didFetchError(error?.localizedDescription ?? "Unkown Error")
-                    return
-                }
-                if let safeData = data {
-                   if let gitHubRepos =  parseJSON(safeData){
-                       dbManager.deleteAllRepos()
-                       BuildRepos(gitHubRepos: gitHubRepos)
+            completion(data)
+        }
+        
+        task.resume()
+    }
+
+    func getAllRepos() {
+        if let url = URL(string: Constant.REPO_END_POINT) {
+            fetchData(from: url) { [weak self] data in
+                guard let self = self else { return }
+                
+                if let safeData = data,
+                   let gitHubRepos = self.parseRepo(safeData) {
                     
-                    }
+                    self.BuildRepos(gitHubRepos: gitHubRepos)
+                    self.dbManager.deleteAllRepos()
+                } else {
+                    self.delegate.didFetchError("Failed to fetch data")
                 }
             }
-            task.resume()
         } else {
             delegate.didFetchError("Invalid URL")
         }
-        
     }
-    
-    private func BuildRepos (gitHubRepos : [GithubRepository]) {
-        
-        var reposArr : [LocalGitRepo] = []
-        let group = DispatchGroup()
-        
-        
-        for singleRepo in gitHubRepos {
-            group.enter()
-            RepoBuilder(networkManager: self, networkRepoObject: singleRepo).build { repo in
-                reposArr.append(repo!)
-                group.leave()
+
+    func getRepoCreationDate(endPoint: String,completion: @escaping (String?) -> Void) {
+        if let url = URL(string: endPoint) {
+            fetchData(from: url) { data in
+                if let safeData = data {
+                    let stringDate = self.parseDate(safeData)
+                    completion(stringDate?.created_at)
+                } else {
+                    print("Failed to fetch data")
+                    completion(nil)
+                }
             }
-        }
-        group.notify(queue: .main) {
-            self.dbManager.saveReposToDB(repos: reposArr)
-            self.delegate.didFetchRepos(reposArr)
-                               }
-    }
-    
-    private func parseJSON(_ reposData : Data) -> [GithubRepository]? {
-        let decoder = JSONDecoder()
-        do{
-            let decodedData = try decoder.decode([GithubRepository].self, from: reposData)
-            return decodedData
-            
-        } catch {
-            delegate.didFetchError("\(error.localizedDescription),JSON")
-            return nil
+        } else {
+            print("Invalid URL")
+            completion(nil)
         }
     }
     
@@ -79,7 +80,7 @@ class NetworkingManager{
         }
 
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let error = error {
+            if error != nil {
                
                 completion(nil)
                 return
@@ -89,9 +90,48 @@ class NetworkingManager{
                
                 completion(data)
             }
+            
         }
 
         task.resume()
+    }
+    
+    
+    private func BuildRepos (gitHubRepos : [RemoteRepo]) {
+        
+        var reposArr : [Repo] = []
+        let group = DispatchGroup()
+        
+        
+        for singleRepo in gitHubRepos {
+            group.enter()
+            RepoBuilder(networkManager: self, networkRepoObject: singleRepo).build { repo in
+                reposArr.append(repo!)
+                group.leave()
+            }
+        }
+        group.notify(queue: .main) {
+            self.dbManager.cashRepos(repos: reposArr)
+            self.delegate.didFetchRepos(reposArr)
+                               }
+    }
+    private func parseData<T: Decodable>(_ data: Data, type: T.Type) -> T? {
+        let decoder = JSONDecoder()
+        do {
+            let decodedData = try decoder.decode(type, from: data)
+            return decodedData
+        } catch {
+            delegate.didFetchError("\(error.localizedDescription), JSON")
+            return nil
+        }
+    }
+
+    private func parseRepo(_ reposData: Data) -> [RemoteRepo]? {
+        return parseData(reposData, type: [RemoteRepo].self)
+    }
+
+    private func parseDate(_ date: Data) -> RepoDate? {
+        return parseData(date, type: RepoDate.self)
     }
 
 }

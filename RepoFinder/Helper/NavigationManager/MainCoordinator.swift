@@ -32,7 +32,7 @@ class MainCoordinator : Coordinator {
         navigationController.pushViewController( reposVC, animated: true)
         
     }
-    func navigateToDetails (gitRepos:LocalGitRepo) {
+    func navigateToDetails (gitRepos:Repo) {
         
         let detailsVC = DetailsViewController.instantiate()
         detailsVC.coordinator = self

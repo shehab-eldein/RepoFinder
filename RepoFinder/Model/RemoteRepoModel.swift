@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GithubRepository: Codable {
+struct RemoteRepo: Codable {
     let id: Int
     let nodeID: String
     let name: String
@@ -33,5 +33,8 @@ struct GithubRepository: Codable {
              forksURL = "forks_url"
     }
 }
-
+struct RepoDate: Codable {
+    let created_at: String
+    
+}
 

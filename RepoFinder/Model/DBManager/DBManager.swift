@@ -9,12 +9,12 @@ import Foundation
 import UIKit
 import CoreData
 
-class DBManager  {
+class DBManager {
     
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
-   func saveReposToDB(repos: [LocalGitRepo]) {
+   func cashRepos(repos: [Repo]) {
         let context: NSManagedObjectContext = appDelegate.persistentContainer.viewContext
 
         for repo in repos {
@@ -39,18 +39,18 @@ class DBManager  {
     }
         
     
-    func getProductsCash() -> [LocalGitRepo]  {
+    func getProductsCash() -> [Repo]  {
 
         var repoObject:[NSManagedObject]!
         let context:NSManagedObjectContext = appDelegate.persistentContainer.viewContext
-        var repos : [LocalGitRepo] = []
+        var repos : [Repo] = []
         let fetchReq = NSFetchRequest<NSManagedObject>(entityName: Constant.REPO_ENTITY_NAME)
         do{
             repoObject = try context.fetch(fetchReq)
             for fav in repoObject{
                
                 
-    repos.append(LocalGitRepo(
+    repos.append(Repo(
                     ownerName: fav.value( forKey: "ownerName") as? String ?? "no Name",
                     fullName: fav.value( forKey: "fullName")as? String ?? "no Name",
                     details: fav.value( forKey: "details")as! String ,
@@ -58,7 +58,7 @@ class DBManager  {
                     profileUrl: fav.value( forKey: "profileUrl")as? String ?? "",
                     repoUrl:fav.value( forKey: "repoUrl")as? String ?? ""
 ,
-                    image:  (fav.value( forKey: "image")as! Data)))
+                    image:  (fav.value( forKey: "image")as? Data)))
             }
         }catch let error as NSError{
             print(error.localizedDescription)

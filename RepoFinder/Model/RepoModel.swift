@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct LocalGitRepo {
+struct Repo {
     let ownerName : String
     let fullName: String
     let details: String

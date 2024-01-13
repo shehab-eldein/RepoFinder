@@ -24,7 +24,7 @@ class DetailsViewController: UIViewController,StoryBoard {
     
 // MARK: - Var
 
-    var repoObject: LocalGitRepo!
+    var repoObject: Repo!
     weak var coordinator: MainCoordinator?
 
 // MARK: - LifeCycle
