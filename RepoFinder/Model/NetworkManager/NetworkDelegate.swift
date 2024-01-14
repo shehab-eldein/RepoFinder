@@ -7,6 +7,6 @@
 
 import Foundation
 protocol NetworkDelegate {
-    func didFetchRepos(_ GitRepo: [Repo])
+    func didFetchRepos(_ Repos: [Repo])
     func didFetchError (_ error: String)
 }

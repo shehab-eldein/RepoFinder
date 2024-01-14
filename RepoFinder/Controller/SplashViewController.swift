@@ -9,45 +9,54 @@ import UIKit
 
 class SplshViewController: UIViewController,StoryBoard {
     
-    weak var coordinator: MainCoordinator?
-    
+   
+    // MARK: - Outlets
+
     @IBOutlet weak var gitLogo: UIImageView!
     
     @IBOutlet weak var appTitleLabel: UILabel!
     
+    // MARK: - Variables
+
+    weak var coordinator: MainCoordinator?
+    
+    // MARK: - Life Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        gitLogo.image = UIImage(named: "gitLogo")
+        gitLogo.image = UIImage(named: Constant.LOGO_IMAGE_NAME)
         
         
     }
     override func viewDidAppear(_ animated: Bool) {
-        animateTitle(label: appTitleLabel, text: "Repo Finder")
+        animateTitle(label: appTitleLabel, text: Constant.APP_NAME){
+            self.navigateHome()
+        }
         
     }
-    
-    func animateTitle(label: UILabel, text: String) {
+    // MARK: - Functions
+
+    func animateTitle(label: UILabel, text: String, completion: @escaping () -> Void) {
         var animatedText = ""
         let characters = Array(text)
         
         for (index, character) in characters.enumerated() {
             
-        DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(index) * 0.1) {
                 animatedText.append(character)
                 label.text = animatedText
                 
                 if index == characters.count - 1 {
                     UIView.transition(with: label, duration: 0.3, options: .transitionCrossDissolve, animations: {
                         label.text = text
-                    }, completion:{_ in
-                        
-                        self.navigateHome()
+                    }, completion: { _ in
+                        completion()
                     })
                 }
             }
         }
     }
+
     
     
     func navigateHome() {

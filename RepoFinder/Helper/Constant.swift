@@ -12,4 +12,7 @@ struct Constant {
    static let REPO_CELL_ID = "repoCell"
    static let REPO_NIB_NAME = "RepoCell"
    static let REPO_ENTITY_NAME = "RepoModel"
+   static let LOGO_IMAGE_NAME = "gitLogo"
+    static let APP_NAME = "Repo Finder"
+    
 }

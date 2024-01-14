@@ -31,7 +31,6 @@
 		634060C12B4F8CB6003DCE8C /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634060C02B4F8CB6003DCE8C /* Constant.swift */; };
 		634060C62B4FA653003DCE8C /* RepoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634060C42B4FA653003DCE8C /* RepoCell.swift */; };
 		634060C72B4FA653003DCE8C /* RepoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 634060C52B4FA653003DCE8C /* RepoCell.xib */; };
-		634060C92B4FAE95003DCE8C /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634060C82B4FAE95003DCE8C /* ImageExtension.swift */; };
 		63A447342B51D6F200E52F34 /* RepoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A447332B51D6F200E52F34 /* RepoModel.swift */; };
 		63A447362B51D81800E52F34 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A447352B51D81800E52F34 /* DBManager.swift */; };
 		63A4473A2B52010700E52F34 /* RepoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A447392B52010700E52F34 /* RepoBuilder.swift */; };
@@ -84,7 +83,6 @@
 		634060C02B4F8CB6003DCE8C /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		634060C42B4FA653003DCE8C /* RepoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoCell.swift; sourceTree = "<group>"; };
 		634060C52B4FA653003DCE8C /* RepoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RepoCell.xib; sourceTree = "<group>"; };
-		634060C82B4FAE95003DCE8C /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
 		63A447332B51D6F200E52F34 /* RepoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoModel.swift; sourceTree = "<group>"; };
 		63A447352B51D81800E52F34 /* DBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBManager.swift; sourceTree = "<group>"; };
 		63A447392B52010700E52F34 /* RepoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoBuilder.swift; sourceTree = "<group>"; };
@@ -170,7 +168,6 @@
 			isa = PBXGroup;
 			children = (
 				63E0EF402B4FBE9F0030820D /* UIViewExtension.swift */,
-				634060C82B4FAE95003DCE8C /* ImageExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -472,7 +469,6 @@
 				634060BF2B4F8C07003DCE8C /* NetworkDelegate.swift in Sources */,
 				634060B22B4F7797003DCE8C /* StoryBoard.swift in Sources */,
 				63A4473A2B52010700E52F34 /* RepoBuilder.swift in Sources */,
-				634060C92B4FAE95003DCE8C /* ImageExtension.swift in Sources */,
 				634060B62B4F7978003DCE8C /* MainCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -656,6 +652,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RepoFinder/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Repo Finder";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = s;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -684,6 +681,7 @@
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RepoFinder/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Repo Finder";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = s;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";

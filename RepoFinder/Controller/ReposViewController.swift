@@ -99,7 +99,7 @@ class ReposViewController: UIViewController,StoryBoard,NetworkDelegate {
             
             indecatorHandler(work: false)
             reposTabel.reloadData()
-            showInfoPopup(title: "Error", message: error + "This is Last Cashed Data.")
+            reposArr.isEmpty ? showInfoPopup(title: "Offline Mode", message: error + " You don't have cashed data yet. please connect to the internet") : showInfoPopup(title: "Offline Mode", message: error + " This is Last Cashed Data.")
             
           }
         

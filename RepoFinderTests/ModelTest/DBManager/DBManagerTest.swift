@@ -45,8 +45,6 @@ class DBManagerTests: XCTestCase {
         dbManager.deleteAllRepos()
         cachedRepos = dbManager.getProductsCash()
         
-        
-        
         XCTAssertEqual(cachedRepos.count, 0)
     }
 

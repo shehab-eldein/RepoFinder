@@ -32,7 +32,7 @@ class DBManager {
 
         do {
             try context.save()
-            print("Successful insert")
+            print("Successful Cashed")
         } catch let error as NSError {
             print(error.localizedDescription)
         }

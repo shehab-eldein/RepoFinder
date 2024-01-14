@@ -19,7 +19,7 @@ class NetworkingManager{
            self.session = session
        }
     
-    func fetchData(from url: URL, completion: @escaping (Data?) -> Void) {
+   private func fetchData(from url: URL, completion: @escaping (Data?) -> Void) {
         let request = URLRequest(url: url)
         let session = URLSession(configuration: .default)
         
@@ -121,7 +121,7 @@ class NetworkingManager{
             let decodedData = try decoder.decode(type, from: data)
             return decodedData
         } catch {
-            delegate.didFetchError("\(error.localizedDescription), JSON")
+           
             return nil
         }
     }
