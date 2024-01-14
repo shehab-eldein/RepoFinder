@@ -6,8 +6,8 @@ You can also use the app in offline mode the app has interactive search and  the
 Architectural pattern: MVC 
 
 Patterns Use: 
- Delegate to transfer data between two classes 
- Coordinator to separate the Navigation Logic 
+ Delegate to transfer data between two classes , 
+ Coordinator to separate the Navigation Logic ,
  Builder to create the repo object because it has an image and date out of the Main Model
 
 Local data:  CoreData
